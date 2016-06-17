@@ -3,10 +3,10 @@
 var setRandom = function () {
   //return a random number that will be (almost) anywhere on the board
   var randomNumber = Math.random() * boardSize;
-  if (randomNumber > 2 * r && randomNumber < (boardSize - 2 * r)) {
+  if (randomNumber > 2 * r && randomNumber < (boardSize - (2 * r))) {
     return randomNumber;
   } else {
-    setRandom();
+    return setRandom();
   }
 };
 ///BOARD
@@ -56,10 +56,10 @@ var enemies = d3.select('svg').selectAll('circle')
    .enter()
    .append('circle')
    .attr({
-     'cx': function (d) { return d.cx; },
-     'cy': function (d) { return setRandom() }
+     'cx': function (d) { return setRandom(); },
+     'cy': function (d) { return setRandom(); }
    })
-   .attr({r:r});
+   .attr({r: r});
 
 
 
@@ -68,12 +68,17 @@ var enemies = d3.select('svg').selectAll('circle')
 
 //Make the circles move
    //can also interrupt current transition with .interrupt() ... IF THEY HIT???
+var moveRepeatly = function() {
+  setTimeout(function () {
+    enemies.transition()
+    .duration(2000)
+    .attr('cx', function(d) { return setRandom(); })
+    .attr('cy', function(d) { return setRandom(); });
+    moveRepeatly();
+  }, 1000);
+};
 
-enemies.transition()
-   .duration(2000)
-   .attr('cx', function(d) { return setRandom(); })
-   .attr('cy', function(d) { return setRandom(); });
-
+moveRepeatly();
 
 
 
