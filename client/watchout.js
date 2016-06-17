@@ -6,7 +6,7 @@ var setRandom = function () {
   if (randomNumber > 2 * r && randomNumber < (boardSize - 2 * r)) {
     return randomNumber;
   } else {
-    return setRandom();
+    setRandom();
   }
 };
 ///BOARD
@@ -33,7 +33,8 @@ var svg = d3.select('.board').selectAll('svg')
 var r = 25;
 var circleAttributes = [
  {'r': r, 'cx': 50, 'cy': 150}, 
- // {'r': 25, 'cx': 50, 'cy': 75},
+ {'r': r, 'cx': 50, 'cy': 50},
+ // {'r': 25, 'cx': 50, 'cy': 75}r
  // {'r': 25, 'cx': 50, 'cy': 50},
  // {'r': 25, 'cx': 50, 'cy': 50},
  // {'r': 25, 'cx': 50, 'cy': 50},
@@ -55,8 +56,8 @@ var enemies = d3.select('svg').selectAll('circle')
    .enter()
    .append('circle')
    .attr({
-     'cx': function (d) { setRandom(); },
-     'cy': function (d) { setRandom(); }
+     'cx': function (d) { return d.cx; },
+     'cy': function (d) { return setRandom() }
    })
    .attr({r:r});
 
