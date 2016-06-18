@@ -2,11 +2,11 @@
 var ourEach = function (col, it){
   if (Array.isArray(col)){
     for(var i = 0; i < col.length; i++){
-      it(col[i]);
+      it(col[i], i, col);
     }
   } else {
       for (var prop in col){
-        it(col[prop]);
+        it(col[prop], prop, col);
       }
   }
 };
@@ -48,18 +48,18 @@ var svg = d3.select('.board').selectAll('svg')
 var r = 25;
 var enemiesArray = [
  {'r': r, 'cx': 50, 'cy': 150}, 
- {'r': r, 'cx': 50, 'cy': 50},
- // {'r': 25, 'cx': 50, 'cy': 75}r
- // {'r': 25, 'cx': 50, 'cy': 50},
- // {'r': 25, 'cx': 50, 'cy': 50},
- // {'r': 25, 'cx': 50, 'cy': 50},
- // {'r': 25, 'cx': 50, 'cy': 50},
- // {'r': 25, 'cx': 50, 'cy': 50},
- // {'r': 25, 'cx': 50, 'cy': 50},
- // {'r': 25, 'cx': 50, 'cy': 50},
- // {'r': 25, 'cx': 50, 'cy': 50},
- {'r': r, 'cx': 50, 'cy': 150},
- {'r': r, 'cx': 50, 'cy': 50},
+ // {'r': r, 'cx': 50, 'cy': 50},
+ // // {'r': 25, 'cx': 50, 'cy': 75}r
+ // // {'r': 25, 'cx': 50, 'cy': 50},
+ // // {'r': 25, 'cx': 50, 'cy': 50},
+ // // {'r': 25, 'cx': 50, 'cy': 50},
+ // // {'r': 25, 'cx': 50, 'cy': 50},
+ // // {'r': 25, 'cx': 50, 'cy': 50},
+ // // {'r': 25, 'cx': 50, 'cy': 50},
+ // // {'r': 25, 'cx': 50, 'cy': 50},
+ // // {'r': 25, 'cx': 50, 'cy': 50},
+ // {'r': r, 'cx': 50, 'cy': 150},
+ // {'r': r, 'cx': 50, 'cy': 50},
  {'r': r, 'cx': 50, 'cy': 50},
  {'r': r, 'cx': 50, 'cy': 50}];
 
@@ -109,7 +109,7 @@ var moveRepeatly = function() {
   }, 1000);
 };
 
-// moveRepeatly();
+ moveRepeatly();
 
 var distanceToPlayer = function () {
   //GET PLAYER X and Y
@@ -121,31 +121,54 @@ var distanceToPlayer = function () {
   //GET ALL ENEMY Xs and Yx
 
   // loop through all enemy nodes
-   ourEach(enemies, function (enemy, i) {
+  ourEach(enemies, function (enemy, i) {
     // get absolute value of the difference between enemyX and playerX
-    var diffX = Math.abs(enemy[i].cx - playerX );
-      // d3.selectAll().attribute[0][i].cx.value
-    console.log(diffX);
-    // get absolute value of the difference between enemyY and playerY
-    var diffY = Math.abs(enemy[i][i].cx - playerY);
+    ourEach(enemy, function(obj) {
+      diffX = Math.abs(obj['attributes']['0']['value'] - playerX );
+      console.log('difference of X: ' + diffX);
+      diffY = Math.abs(obj['attributes']['1']['value'] - playerY );
+      console.log('difference of Y: ' + diffY);
 
-    var distance = Math.sqrt((diffX * diffX) + (diffY * diffY));
-    // if distance < radius
-    if (distance < (r * 2)) {
-      collision();
-    }
+                      // var diffX = Math.abs(enemy[i]['attributes']['0']['value'] - playerX );
+                      //   // d3.selectAll().attribute[0][i].cx.value
+                      // console.log(diffX);
+                      // // get absolute value of the difference between enemyY and playerY
+                      // var diffY = Math.abs(enemy[i]['attributes']['1']['value'] - playerY);
+
+      var distance = Math.sqrt((diffX * diffX) + (diffY * diffY));
+      // if distance < radius
+      if (distance < (r * 2)) {
+        collision();
+      }
+
+    });
   });
-};
-  setInterval(function() {
-    distanceToPlayer();
-  }, 100);
 
-distanceToPlayer();
+  setTimeout(function() {
+    distanceToPlayer();
+  }, 25);
+};
+ distanceToPlayer();
 
 // create a collision function
 var collision = function () {
-  alert('Bang you are dead');
+  // alert('Bang you are dead');
 };
+
+
+
+// ///////// create function to move player 
+//   var x, y;
+//   // d3.select('.player').on('mousedown', function () {
+//   player.on('mousedown', function () {
+//     x = d3.mouse(this)[0];
+//     y = d3.mouse(this)[1];
+//     // d3.mouse(d3.select('body').node())
+//       var coordinates = d3.mouse(svg.node());
+//   });
+
+
+
 
 
 
