@@ -1,7 +1,9 @@
-//GLOBAL FUNCTIONS
+///////////////////////////////////////
+////GLOBAL FUNCTIONS
+///////////////////////////////////////
 var ourEach = function (col, it){
-  if (Array.isArray(col)){
-    for(var i = 0; i < col.length; i++){
+  if (Array.isArray(col)) {
+    for(var i = 0; i < col.length; i++) {
       it(col[i], i, col);
     }
   } else {
@@ -20,8 +22,10 @@ var setRandom = function () {
     return setRandom();
   }
 };
+///////////////////////////////////////
+////SCOREBOARD
+///////////////////////////////////////
 
-//SCOREBOARD
 var highScore = [0];
 var scoreData = [1];
 var hits = [0];
@@ -51,7 +55,22 @@ var resetScore = function () {
     .data(hits)
     .text(function(d) { return d; });
 };
-///BOARD
+
+var trackHighScore = function () {
+  var prevHigh = highScore[0];
+  var newHigh = scoreData[0];
+  if (prevHigh < newHigh) {
+    highScore[0] = newHigh;
+  }
+
+  d3.select('.highscore span')
+    .data(highScore)
+    .text(function(d) { return d; } );
+};
+
+///////////////////////////////////////
+////BOARD
+///////////////////////////////////////
 
 var boardSize = 800;
 
@@ -122,13 +141,18 @@ var moveRepeatly = function() {
     .duration(1000)
     .attr('cx', function(d) { return setRandom(); })
     .attr('cy', function(d) { return setRandom(); });
-    increaseScore();
+    // increaseScore();
     moveRepeatly();
 
   }, 1000);
 };
 
- moveRepeatly();
+ moveRepeatly ();
+
+ setInterval (function() {
+   increaseScore();
+   trackHighScore();
+ }, 100);
 
 var distanceToPlayer = function () {
   //GET PLAYER X and Y
