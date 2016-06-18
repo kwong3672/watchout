@@ -24,16 +24,33 @@ var setRandom = function () {
 //SCOREBOARD
 var highScore = [0];
 var scoreData = [1];
+var hits = [0];
 
 //start initially on page load
 //want it to reset if there is ever a collision
-var increaseScore = function (crash) {
+var increaseScore = function () {
   var currentScore = d3.select('.current span')
       .data(scoreData)
-      .text(function(d){return d;});
+      .text(function(d) { return d; } );
   scoreData[0] = scoreData[0] + 1;
 };
 
+//create reset score function 
+
+var resetScore = function () {
+  //set the currentScore to 0
+  scoreData[0] = 0;
+  //set the hits to increase by 1
+  hits[0] = hits[0] + 1;
+  //update the right div/spans.
+  d3.select('.current span')
+    .data(scoreData)
+    .text(function(d) { return d; });
+
+  d3.select('.collisions span')
+    .data(hits)
+    .text(function(d) { return d; });
+};
 ///BOARD
 
 var boardSize = 800;
@@ -155,7 +172,7 @@ var distanceToPlayer = function () {
 // create a collision function
 var collision = function () {
   //call the increaseScore function and pass true to stop it. 
-   console.log('Bang you are dead');
+   resetScore();
 };
 
 
@@ -176,49 +193,3 @@ var drag = d3.behavior.drag()
 player.call(drag);
 
 
-
-
-
-
-///see if the data thing works 
-// var dataTest = [{bob:2},{bob:2},{bob:2},{bob:2}];
-// d3.selectAll('.enemies')
-//    .data(dataTest, function(d){return d.bob;})
-//    .enter()
-//    .attr({'class':})
-
-// create some type of function that tests to see if any other circles touching it
-// // create a setTimeout that recursively calls our collision test
-
-// ///MOUSE: 
-// player.on('dragstart' function(){
-//   d3.event./////.stopPropagation
-// })
-
-// force.drag
-// //d3.mouse will tell us mouse coordinates [x,y] : relative to the container!! 
-//   //will need to use this + funciton that reports 
-//      //if any other el crosses mouse, hit++
-//      //interrupt: play again / deaths
-// // console.log(d3.mouse());
-
-// .on('click') // .mouseover
-
-//if click: use d3.mouse to report position? continuously?
-
-
-//d3.event: stores current event
-//captureFlag: all events of the specified type will be dispatched to registered EventListenere
-
-
-
-//
-// function enter_update_exit (){
-// //new transition
-// }
-
-// enter_update_exit();
- //setTimeout 
-
- //linear movement. 
-    //rotate keyfame2s
