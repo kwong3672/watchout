@@ -125,9 +125,9 @@ var distanceToPlayer = function () {
     // get absolute value of the difference between enemyX and playerX
     ourEach(enemy, function(obj) {
       diffX = Math.abs(obj['attributes']['0']['value'] - playerX );
-      console.log('difference of X: ' + diffX);
+      // console.log('difference of X: ' + diffX);
       diffY = Math.abs(obj['attributes']['1']['value'] - playerY );
-      console.log('difference of Y: ' + diffY);
+      // console.log('difference of Y: ' + diffY);
 
                       // var diffX = Math.abs(enemy[i]['attributes']['0']['value'] - playerX );
                       //   // d3.selectAll().attribute[0][i].cx.value
@@ -152,20 +152,25 @@ var distanceToPlayer = function () {
 
 // create a collision function
 var collision = function () {
-  // alert('Bang you are dead');
+   console.log('Bang you are dead');
 };
 
 
 
-// ///////// create function to move player 
-//   var x, y;
-//   // d3.select('.player').on('mousedown', function () {
-//   player.on('mousedown', function () {
-//     x = d3.mouse(this)[0];
-//     y = d3.mouse(this)[1];
-//     // d3.mouse(d3.select('body').node())
-//       var coordinates = d3.mouse(svg.node());
-//   });
+///////// create function to move player 
+var drag = d3.behavior.drag()
+  .on('drag', function (d, i) {
+    var temp = 0;
+    d.cx += d3.event.dx;
+    console.log(d.cx);
+    d.cy += d3.event.dy;
+    d3.select(this).attr('transform', function(d, i) {
+      return 'translate(' + [d.cx, d.cy] + ')';
+    });
+    // console.log('you are dragging the mouse');
+  });
+
+player.call(drag);
 
 
 
