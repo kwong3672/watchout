@@ -1,4 +1,15 @@
 //GLOBAL FUNCTIONS
+var ourEach = function (col, it){
+  if (Array.isArray(col)){
+    for(var i = 0; i < col.length; i++){
+      it(col[i]);
+    }
+  } else {
+      for (var prop in col){
+        it(col[prop]);
+      }
+  }
+};
 
 var setRandom = function () {
   //return a random number that will be (almost) anywhere on the board
@@ -9,7 +20,11 @@ var setRandom = function () {
     return setRandom();
   }
 };
+
+
 ///BOARD
+
+
 
 var boardSize = 800;
 
@@ -94,16 +109,60 @@ var moveRepeatly = function() {
   }, 1000);
 };
 
-moveRepeatly();
+// moveRepeatly();
 
+var distanceToPlayer = function () {
+  //GET PLAYER X and Y
+  var playerX = d3.select('.player').attr('cx');
+  var playerY = d3.select('.player').attr('cy');
+
+  //
+
+  //GET ALL ENEMY Xs and Yx
+
+  // loop through all enemy nodes
+   ourEach(enemies, function (enemy, i) {
+    // get absolute value of the difference between enemyX and playerX
+    var diffX = Math.abs(enemy[i].cx - playerX );
+      // d3.selectAll().attribute[0][i].cx.value
+    console.log(diffX);
+    // get absolute value of the difference between enemyY and playerY
+    var diffY = Math.abs(enemy[i][i].cx - playerY);
+
+    var distance = Math.sqrt((diffX * diffX) + (diffY * diffY));
+    // if distance < radius
+    if (distance < (r * 2)) {
+      collision();
+    }
+  });
+};
+  setInterval(function() {
+    distanceToPlayer();
+  }, 100);
+
+distanceToPlayer();
+
+// create a collision function
+var collision = function () {
+  alert('Bang you are dead');
+};
+
+
+
+///see if the data thing works 
+// var dataTest = [{bob:2},{bob:2},{bob:2},{bob:2}];
+// d3.selectAll('.enemies')
+//    .data(dataTest, function(d){return d.bob;})
+//    .enter()
+//    .attr({'class':})
 
 // create some type of function that tests to see if any other circles touching it
 // // create a setTimeout that recursively calls our collision test
 
 // ///MOUSE: 
-player.on('dragstart' function(){
-  d3.event./////.stopPropagation
-})
+// player.on('dragstart' function(){
+//   d3.event./////.stopPropagation
+// })
 
 // force.drag
 // //d3.mouse will tell us mouse coordinates [x,y] : relative to the container!! 
