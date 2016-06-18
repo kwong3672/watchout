@@ -21,10 +21,20 @@ var setRandom = function () {
   }
 };
 
+//SCOREBOARD
+var highScore = [0];
+var scoreData = [1];
+
+//start initially on page load
+//want it to reset if there is ever a collision
+var increaseScore = function (crash) {
+  var currentScore = d3.select('.current span')
+      .data(scoreData)
+      .text(function(d){return d;});
+  scoreData[0] = scoreData[0] + 1;
+};
 
 ///BOARD
-
-
 
 var boardSize = 800;
 
@@ -47,21 +57,10 @@ var svg = d3.select('.board').selectAll('svg')
 // create an array for the circle object that stores all attributes nclues r, cx, cy, (transition to new cx, cy
 var r = 25;
 var enemiesArray = [
- {'r': r, 'cx': 50, 'cy': 150}, 
- // {'r': r, 'cx': 50, 'cy': 50},
- // // {'r': 25, 'cx': 50, 'cy': 75}r
- // // {'r': 25, 'cx': 50, 'cy': 50},
- // // {'r': 25, 'cx': 50, 'cy': 50},
- // // {'r': 25, 'cx': 50, 'cy': 50},
- // // {'r': 25, 'cx': 50, 'cy': 50},
- // // {'r': 25, 'cx': 50, 'cy': 50},
- // // {'r': 25, 'cx': 50, 'cy': 50},
- // // {'r': 25, 'cx': 50, 'cy': 50},
- // // {'r': 25, 'cx': 50, 'cy': 50},
- // {'r': r, 'cx': 50, 'cy': 150},
- // {'r': r, 'cx': 50, 'cy': 50},
- {'r': r, 'cx': 50, 'cy': 50},
- {'r': r, 'cx': 50, 'cy': 50}];
+ {'r': r, 'cx': 0, 'cy': 0}, 
+ {'r': r, 'cx': 0, 'cy': 0},
+ {'r': r, 'cx': 0, 'cy': 0},
+ {'r': r, 'cx': 0, 'cy': null}];
 
 
 // select circle
@@ -80,7 +79,8 @@ var enemies = d3.select('svg').selectAll('.enemies')
 
 // PLAYERS
 // create seperate user circle that will take mouse input to move
-var playerArray = [{'r': r, 'cx': 50, 'cy': 150}];
+var playerArray = [{'r': r, 'cx': 0, 'cy': 0}];
+
 
 
 var player = d3.select('svg').selectAll('.player')
@@ -105,7 +105,9 @@ var moveRepeatly = function() {
     .duration(1000)
     .attr('cx', function(d) { return setRandom(); })
     .attr('cy', function(d) { return setRandom(); });
+    increaseScore();
     moveRepeatly();
+
   }, 1000);
 };
 
@@ -152,6 +154,7 @@ var distanceToPlayer = function () {
 
 // create a collision function
 var collision = function () {
+  //call the increaseScore function and pass true to stop it. 
    console.log('Bang you are dead');
 };
 
@@ -160,9 +163,9 @@ var collision = function () {
 ///////// create function to move player 
 var drag = d3.behavior.drag()
   .on('drag', function (d, i) {
-    var temp = 0;
+    // var temp = 0;
     d.cx += d3.event.dx;
-    console.log(d.cx);
+     // console.log(d.cx);
     d.cy += d3.event.dy;
     d3.select(this).attr('transform', function(d, i) {
       return 'translate(' + [d.cx, d.cy] + ')';
