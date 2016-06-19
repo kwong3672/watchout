@@ -89,31 +89,41 @@ var svg = d3.select('.board').selectAll('svg')
   });
 
 
-//  ENEMIES
-// create an array for the circle object that stores all attributes nclues r, cx, cy, (transition to new cx, cy
+///////////////////////////////////////
+////ENEMIES
+///////////////////////////////////////
+///ENEMIES DATA
 var r = 25;
 var enemiesArray = [
  {'r': r, 'cx': 0, 'cy': 0}, 
  {'r': r, 'cx': 0, 'cy': 0},
+ {'r': r, 'cx': 0, 'cy': 0}, 
+ {'r': r, 'cx': 0, 'cy': 0},
+{'r': r, 'cx': 0, 'cy': 0},
  {'r': r, 'cx': 0, 'cy': 0},
  {'r': r, 'cx': 0, 'cy': null}];
 
 
-// select circle
-// append the data set to the circle - i
+////////////////////////////CONNECT ENEMIES AND DATA
 var enemies = d3.select('svg').selectAll('.enemies')
    .data(enemiesArray)
    .enter()
-   .append('circle')
+   .append('circle')  ///make image insteaD?? ?  >> 'svg:image'
    .attr({
      'cx': function (d) { return setRandom(); },
      'cy': function (d) { return setRandom(); }
    })
    .attr({r: r})
-   .attr({'class': 'enemies'});
-
-
-// PLAYERS
+   .attr({'class': 'enemies'})
+   .attr('transform', 'translate(' + r + ',' + r + ')')
+   // .attr('xlink:href', 'https://image.spreadshirtmedia.com/image-server/v1/designs/12334647,width=178,height=178,version=1366571108/shuriken.png');
+   // var img = enemies.append('svg:image')
+   //   .attr(xlink:href, 'https://image.spreadshirtmedia.com/image-server/v1/designs/12334647,width=178,height=178,version=1366571108/shuriken.png')
+   //   .attr('width' , 25)
+   //   .attr('height' , 25);
+///////////////////////////////////////
+////PLAYER
+///////////////////////////////////////
 // create seperate user circle that will take mouse input to move
 var playerArray = [{'r': r, 'cx': 0, 'cy': 0}];
 
@@ -131,9 +141,14 @@ var player = d3.select('svg').selectAll('.player')
    .attr({'class': 'player'})
    .attr({'fill': 'red'});
 
-//ANIMATIONS
 
-//Make the enemies move
+
+
+///////////////////////////////////////
+////ANIMATIONS
+///////////////////////////////////////
+
+///////// MOVE THE ENEMIES
    //can also interrupt current transition with .interrupt() ... IF THEY HIT???
 var moveRepeatly = function() {
   setTimeout(function () {
@@ -154,15 +169,14 @@ var moveRepeatly = function() {
    trackHighScore();
  }, 100);
 
+
+////////////CALCULATE DISTANCES ENEMY:PLAYER
 var distanceToPlayer = function () {
   //GET PLAYER X and Y
   var playerX = d3.select('.player').attr('cx');
   var playerY = d3.select('.player').attr('cy');
 
-  //
-
   //GET ALL ENEMY Xs and Yx
-
   // loop through all enemy nodes
   ourEach(enemies, function (enemy, i) {
     // get absolute value of the difference between enemyX and playerX
@@ -193,15 +207,18 @@ var distanceToPlayer = function () {
 };
  distanceToPlayer();
 
-// create a collision function
+///////////////////////////////////////
+////RESET SCORE UPON COLLISION
+///////////////////////////////////////
 var collision = function () {
   //call the increaseScore function and pass true to stop it. 
    resetScore();
 };
 
 
-
-///////// create function to move player 
+///////////////////////////////////////
+////CLICK-DRAG THE PLAYER
+///////////////////////////////////////
 var drag = d3.behavior.drag()
   .on('drag', function (d, i) {
     // var temp = 0;
@@ -217,3 +234,13 @@ var drag = d3.behavior.drag()
 player.call(drag);
 
 
+///////////////////////////////////////
+////WHIRL THE ENEMIES
+///////////////////////////////////////
+
+d3.timer(function(){
+  svg.selectAll('enemies')
+     .attr('transform', function (d) {
+        return "rotate(" + d + ")";
+     })
+});
